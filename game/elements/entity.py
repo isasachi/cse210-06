@@ -11,6 +11,7 @@ class Entity:
             group: A string containing the entity's group name.
             id: A number that uniquely identifies the entity within the group.
         """
+        self._idx = 0
         self._debug = debug
         
     def is_debug(self):
@@ -20,3 +21,9 @@ class Entity:
             True if the entity is being debugged; False if otherwise.
         """
         return self._debug
+    
+    def set_idx(self, idx):
+        self._idx = idx
+    
+    def get_idx(self):
+        return self._idx

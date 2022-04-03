@@ -44,7 +44,7 @@ class Scene(ActionCallback):
         
         Args:
             group (string): The action group name.
-            cast (Cast): The cast of actors.
+            collection (collection): The collection of entities.
             script (Script): The script of actions.
         """
         actions = self._script.get_actions(group)    

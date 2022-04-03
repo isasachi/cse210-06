@@ -9,6 +9,7 @@ class RaylibAudioService(AudioService):
 
     def __init__(self):
         self._sounds = {}
+        self._last_sound = None
         
     def initialize(self):
         pyray.init_audio_device()
@@ -23,8 +24,13 @@ class RaylibAudioService(AudioService):
         filepath = sound.get_filename()
         volume = sound.get_volume()
         sound = self._sounds[filepath]
+        self._last_sound = sound
         # pyray.set_sound_volume(volume)
         pyray.play_sound(sound)
+    
+    def stop_sound(self):
+        if self._last_sound:
+            pyray.stop_sound(self._last_sound)
     
     def release(self):
         pyray.close_audio_device()
