@@ -7,6 +7,6 @@ class LoadAssetsAction(Action):
         self._video_service = video_service
 
     def execute(self, collection, script, callback):
-        self._audio_service.load_sounds(r'D:\Apps\byui-winter-2022\cse210-projects\cse210-06\assets\sounds')
-        self._video_service.load_fonts(r'D:\Apps\byui-winter-2022\cse210-projects\cse210-06\assets\fonts')
-        self._video_service.load_images(r'D:\Apps\byui-winter-2022\cse210-projects\cse210-06\assets\images')
+        self._audio_service.load_sounds('cse210-06/assets/sounds')
+        self._video_service.load_fonts('cse210-06/assets/fonts')
+        self._video_service.load_images('cse210-06/assets/images')
