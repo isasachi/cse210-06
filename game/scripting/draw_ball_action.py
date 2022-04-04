@@ -11,10 +11,6 @@ class DrawBallAction(Action):
     def execute(self, collection, script, callback):
         ball = collection.get_first_entity(BALL_GROUP)
         body = ball.get_body()
-        #adds a puple box to see what is the space the image is filling
-        # if ball.is_debug():
-        #     rectangle = body.get_rectangle()
-        #     self._video_service.draw_rectangle(rectangle, PURPLE)
 
         image = ball.get_image()
         position = body.get_position()

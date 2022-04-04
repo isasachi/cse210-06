@@ -21,15 +21,22 @@ class CollideBordersAction(Action):
             # opposite score to add points
             stat_b = collection.get_entity_by_idx(STATS_GROUP, PLAYER_B_IDX)
             stat_b.add_points(PLAYER_DEFAULT_POINTS)
-            #callback.on_next(GAME_OVER)
-            callback.on_next(TRY_AGAIN)
-            self._audio_service.play_sound(over_sound)
+            if stat_b.get_score() >= GAME_MAX_SCORE:
+                stat_b.set_is_winner(True)
+                callback.on_next(GAME_OVER)
+                self._audio_service.play_sound(over_sound)
+            else:
+                callback.on_next(TRY_AGAIN)
         
         elif x >= (FIELD_RIGHT - BALL_WIDTH):
             stat_a = collection.get_entity_by_idx(STATS_GROUP, PLAYER_A_IDX)
             stat_a.add_points(PLAYER_DEFAULT_POINTS)
-            callback.on_next(TRY_AGAIN)
-            self._audio_service.play_sound(over_sound)
+            if stat_a.get_score() >= GAME_MAX_SCORE:
+                stat_a.set_is_winner(True)
+                callback.on_next(GAME_OVER)
+                self._audio_service.play_sound(over_sound)
+            else:
+                callback.on_next(TRY_AGAIN)
 
         if y < (FIELD_TOP + (BALL_HEIGHT/2)):
             ball.bounce_y()

@@ -5,7 +5,7 @@ from game.elements.point import Point
 #----------------------------------------------
 
 # GAME
-GAME_NAME = "Ping Pong"
+GAME_NAME = "PING PONG"
 FRAME_RATE = 60
 
 #SCREEN
@@ -82,9 +82,7 @@ STATS_GROUP = 'stats'
 
 #HUD 
 HUD_MARGIN = 15
-#LIVES_GROUP = 'lives'
 SCORE_GROUP = 'score'
-LIVES_FORMAT = 'LIVES: {}'
 SCORE_FORMAT = 'SCORE: {}'
 SCORE_A_POSITION = Point(80, HUD_MARGIN)
 SCORE_B_POSITION = Point(SCREEN_WIDTH - 100, HUD_MARGIN)
@@ -104,19 +102,19 @@ RACKET_VELOCITY = 7
 RACKET_RATE = 6
 RACKET_IMAGES = [fr'D:\Apps\byui-winter-2022\cse210-projects\cse210-06\assets\images\{n:03}.png' for n in range(110, 113)]
 
-#YARD_LINES
-YARD_LINES_GROUP = 'lines'
-YARD_LINES = r'D:\Apps\byui-winter-2022\cse210-projects\cse210-06\assets\images\white.gif'
-
 #DIALOG
 DIALOG_GROUP = 'dialogs'
 ENTER_TO_START = "PRESS ENTER TO START"
 PREP_TO_LAUNCH = "PREPARING TO LAUNCH"
 WAS_GOOD_GAME = "GAME OVER"
+WINNER_GAME = "Winner: {}"
 
 #PLAYER
 PLAYER_A_IDX = 0
 PLAYER_B_IDX = 1
+
+PLAYER_A_NAME = "PLAYER A"
+PLAYER_B_NAME = "PLAYER B"
 
 PLAYER_A_KEY_UP = 'w'
 PLAYER_A_KEY_DOWN = 's'
@@ -125,3 +123,4 @@ PLAYER_B_KEY_UP = 'i'
 PLAYER_B_KEY_DOWN = 'k'
 
 PLAYER_DEFAULT_POINTS = 1
+GAME_MAX_SCORE = 10

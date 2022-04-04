@@ -9,13 +9,9 @@ class Stats(Entity):
         """Constructs a new Stats."""
         super().__init__(debug)
         self._level = 1
-        #self._lives = DEFAULT_LIVES
         self._score = 0
-
-    # def add_life(self):
-    #     """Adds one life."""
-    #     if self._lives < MAXIMUM_LIVES:
-    #         self._lives += 1 
+        self._is_winner = False
+        self._name = ""
 
     def add_points(self, points):
         """Adds the given points to the score.
@@ -32,14 +28,6 @@ class Stats(Entity):
             A number representing the level.
         """
         return self._level
-
-    # def get_lives(self):
-    #     """Gets the lives.
-
-    #     Returns:
-    #         A number representing the lives.
-    #     """
-    #     return self._lives
   
     def get_score(self):
         """Gets the score.
@@ -48,11 +36,6 @@ class Stats(Entity):
             A number representing the score.
         """
         return self._score
-
-    # def lose_life(self):
-    #     """Removes one life."""
-    #     if self._lives > 0:
-    #         self._lives -= 1
     
     def next_level(self):
         """Adds one level."""
@@ -61,5 +44,17 @@ class Stats(Entity):
     def reset(self):
         """Resets the stats back to their default values."""
         self._level = 1
-        #self._lives = DEFAULT_LIVES
         self._score = 0
+        self._is_winner = False
+    
+    def get_is_winner(self):
+        return self._is_winner
+    
+    def set_is_winner(self, is_winner):
+        self._is_winner = is_winner
+    
+    def get_name(self):
+        return self._name
+    
+    def set_name(self, name):
+        self._name = name

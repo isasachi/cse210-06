@@ -9,7 +9,6 @@ class DrawHudAction(Action):
 
     def execute(self, collection, script, callback):
         stats = collection.get_entities(STATS_GROUP)
-        #self._draw_label(collection, LIVES_GROUP, LIVES_FORMAT, stats.get_lives())
         stat_count = 0
         for stat in stats:
             self._draw_label(collection, SCORE_GROUP, stat_count, SCORE_FORMAT, stat.get_score())

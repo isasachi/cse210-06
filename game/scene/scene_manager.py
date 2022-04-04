@@ -3,7 +3,6 @@ from constants import *
 from game.elements.animation import Animation
 from game.elements.ball import Ball
 from game.elements.body import Body
-from game.elements.brick import Brick
 from game.elements.image import Image
 from game.elements.label import Label
 from game.elements.point import Point
@@ -11,13 +10,10 @@ from game.elements.racket import Racket
 from game.elements.stats import Stats
 from game.elements.text import Text 
 from game.scripting.change_scene_action import ChangeSceneAction
-#from game.scripting.check_over_action import CheckOverAction
 from game.scripting.collide_border_action import CollideBordersAction
-#from game.scripting.collide_brick_action import CollideBrickAction
 from game.scripting.collide_racket_action import CollideRacketAction
 from game.scripting.control_racket_action import ControlRacketAction
 from game.scripting.draw_ball_action import DrawBallAction
-#from game.scripting.draw_bricks_action import DrawBricksAction
 from game.scripting.draw_dialog_action import DrawDialogAction
 from game.scripting.draw_hud_action import DrawHudAction
 from game.scripting.draw_racket_action import DrawRacketAction
@@ -45,13 +41,10 @@ class SceneManager:
     PHYSICS_SERVICE = RaylibPhysicsService()
     VIDEO_SERVICE = RaylibVideoService(GAME_NAME, SCREEN_WIDTH, SCREEN_HEIGHT)
 
-    #CHECK_OVER_ACTION = CheckOverAction()
     COLLIDE_BORDERS_ACTION = CollideBordersAction(PHYSICS_SERVICE, AUDIO_SERVICE)
-    #COLLIDE_BRICKS_ACTION = CollideBrickAction(PHYSICS_SERVICE, AUDIO_SERVICE)
     COLLIDE_RACKET_ACTION = CollideRacketAction(PHYSICS_SERVICE, AUDIO_SERVICE)
     CONTROL_RACKET_ACTION = ControlRacketAction(KEYBOARD_SERVICE)
     DRAW_BALL_ACTION = DrawBallAction(VIDEO_SERVICE)
-    #DRAW_BRICKS_ACTION = DrawBricksAction(VIDEO_SERVICE)
     DRAW_DIALOG_ACTION = DrawDialogAction(VIDEO_SERVICE)
     DRAW_HUD_ACTION = DrawHudAction(VIDEO_SERVICE)
     DRAW_RACKET_ACTION= DrawRacketAction(VIDEO_SERVICE)
@@ -85,11 +78,8 @@ class SceneManager:
     
     def _prepare_new_game(self, collection, script):
         self._add_stats(collection)
-        #self._add_level(collection)
-        #self._add_lives(collection)
         self._add_scores(collection)
         self._add_ball(collection)
-        #self._add_bricks(collection)
         self._add_rackets(collection)
         self._add_dialog(collection, ENTER_TO_START)
 
@@ -104,7 +94,6 @@ class SceneManager:
         
     def _prepare_next_level(self, collection, script):
         self._add_ball(collection)
-        #self._add_bricks(collection)
         self._add_rackets(collection)
         self._add_dialog(collection, PREP_TO_LAUNCH)
 
@@ -136,6 +125,11 @@ class SceneManager:
         self._add_ball(collection)
         self._add_rackets(collection)
         self._add_dialog(collection, WAS_GOOD_GAME)
+        winner = ""
+        for stat in collection.get_entities(STATS_GROUP):
+            if stat.get_is_winner():
+                winner = stat.get_name()
+        self._add_dialog_winner(collection, winner)
 
         script.clear_actions(INPUT)
         script.add_action(INPUT, TimedChangeSceneAction(NEW_GAME, 5))
@@ -162,63 +156,22 @@ class SceneManager:
         ball = Ball(body, image, True)
         collection.add_entity(BALL_GROUP, ball)
 
-    # def _add_bricks(self, collection):
-    #     collection.clear_entities(BRICK_GROUP)
-        
-    #     stats = collection.get_first_entity(STATS_GROUP)
-    #     level = stats.get_level() % BASE_LEVELS
-    #     filename = LEVEL_FILE.format(level)
-
-    #     with open(filename, 'r') as file:
-    #         reader = csv.reader(file, skipinitialspace=True)
-
-    #         for r, row in enumerate(reader):
-    #             for c, column in enumerate(row):
-
-    #                 x = FIELD_LEFT + c * BRICK_WIDTH
-    #                 y = FIELD_TOP + r * BRICK_HEIGHT
-    #                 color = column[0]
-    #                 frames = int(column[1])
-    #                 points = BRICK_POINTS 
-                    
-    #                 if frames == 1:
-    #                     points *= 2
-                    
-    #                 position = Point(x, y)
-    #                 size = Point(BRICK_WIDTH, BRICK_HEIGHT)
-    #                 velocity = Point(0, 0)
-    #                 images = BRICK_IMAGES[color][0:frames]
-
-    #                 body = Body(position, size, velocity)
-    #                 animation = Animation(images, BRICK_RATE, BRICK_DELAY)
-
-    #                 brick = Brick(body, animation, points)
-    #                 collection.add_entity(BRICK_GROUP, brick)
-
     def _add_dialog(self, collection, message):
         collection.clear_entities(DIALOG_GROUP)
         text = Text(message, FONT_FILE, FONT_SMALL, ALIGN_CENTER)
         position = Point(CENTER_X, CENTER_Y)
         label = Label(text, position)
         collection.add_entity(DIALOG_GROUP, label)
-
-    # def _add_level(self, collection):
-    #     collection.clear_entities(LEVEL_GROUP)
-    #     text = Text(LEVEL_FORMAT, FONT_FILE, FONT_SMALL, ALIGN_LEFT)
-    #     position = Point(HUD_MARGIN, HUD_MARGIN)
-    #     label = Label(text, position)
-    #     collection.add_entity(LEVEL_GROUP, label)
-
-    # def _add_lives(self, collection):
-    #     collection.clear_entities(LIVES_GROUP)
-    #     text = Text(LIVES_FORMAT, FONT_FILE, FONT_SMALL, ALIGN_RIGHT)
-    #     position = Point(SCREEN_WIDTH - HUD_MARGIN, HUD_MARGIN)
-    #     label = Label(text, position)
-    #     collection.add_entity(LIVES_GROUP, label)
+    
+    def _add_dialog_winner(self, collection, winner):
+        message = WINNER_GAME.format(winner)
+        text = Text(message, FONT_FILE, FONT_SMALL, ALIGN_CENTER)
+        position = Point(CENTER_X, CENTER_Y + FRAME_RATE)
+        label = Label(text, position)
+        collection.add_entity(DIALOG_GROUP, label)
 
     def _add_scores(self, collection):
         collection.clear_entities(SCORE_GROUP)
-        #position = Point(CENTER_X, HUD_MARGIN)
         text = Text(SCORE_FORMAT, FONT_FILE, FONT_SMALL, ALIGN_CENTER)
         label = Label(text, SCORE_A_POSITION)
         collection.add_entity(SCORE_GROUP, label)
@@ -229,9 +182,11 @@ class SceneManager:
     def _add_stats(self, collection):
         collection.clear_entities(STATS_GROUP)
         stat = Stats()
+        stat.set_name(PLAYER_A_NAME)
         collection.add_entity(STATS_GROUP, stat)
         
         stat_b = Stats()
+        stat_b.set_name(PLAYER_B_NAME)
         collection.add_entity(STATS_GROUP, stat_b)
 
     def _add_rackets(self, collection):
@@ -267,7 +222,6 @@ class SceneManager:
         script.add_action(OUTPUT, self.START_DRAWING_ACTION)
         script.add_action(OUTPUT, self.DRAW_HUD_ACTION)
         script.add_action(OUTPUT, self.DRAW_BALL_ACTION)
-        #script.add_action(OUTPUT, self.DRAW_BRICKS_ACTION)
         script.add_action(OUTPUT, self.DRAW_RACKET_ACTION)
         script.add_action(OUTPUT, self.DRAW_DIALOG_ACTION)
         script.add_action(OUTPUT, self.END_DRAWING_ACTION)
@@ -285,7 +239,5 @@ class SceneManager:
         script.add_action(UPDATE, self.MOVE_BALL_ACTION)
         script.add_action(UPDATE, self.MOVE_RACKET_ACTION)
         script.add_action(UPDATE, self.COLLIDE_BORDERS_ACTION)
-        #script.add_action(UPDATE, self.COLLIDE_BRICKS_ACTION)
         script.add_action(UPDATE, self.COLLIDE_RACKET_ACTION)
         script.add_action(UPDATE, self.MOVE_RACKET_ACTION)
-        #script.add_action(UPDATE, self.CHECK_OVER_ACTION)

@@ -15,10 +15,6 @@ class DrawRacketAction(Action):
         for racket in rackets:
             body = racket.get_body()
 
-            # if racket.is_debug():
-            #     rectangle = body.get_rectangle()
-            #     self._video_service.draw_rectangle(rectangle, PURPLE)
-
             animation = racket.get_animation()
             image = animation.next_image()
             position = body.get_position()
