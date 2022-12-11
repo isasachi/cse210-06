@@ -9,6 +9,6 @@ class LoadAssetsAction(Action):
         self._video_service = video_service
 
     def execute(self, collection, script, callback):
-        self._audio_service.load_sounds(os.path.join(GAME_ROOT_FOLDER,r'cse210-06\assets\sounds'))
-        self._video_service.load_fonts(os.path.join(GAME_ROOT_FOLDER,r'cse210-06\assets\fonts'))
-        self._video_service.load_images(os.path.join(GAME_ROOT_FOLDER,r'cse210-06\assets\images'))
+        self._audio_service.load_sounds(os.path.join(GAME_ROOT_FOLDER,r'final-project\assets\sounds'))
+        self._video_service.load_fonts(os.path.join(GAME_ROOT_FOLDER,r'final-project\assets\fonts'))
+        self._video_service.load_images(os.path.join(GAME_ROOT_FOLDER,r'final-project\assets\images'))
