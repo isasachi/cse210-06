@@ -7,9 +7,9 @@ class ControlRacketAction(Action):
     def __init__(self, keyboard_service):
         self._keyboard_service = keyboard_service
 
-    def execute(self, collection, script, callback):
-        racket_a = collection.get_entity_by_idx(RACKET_GROUP, PLAYER_A_IDX)
-        racket_b = collection.get_entity_by_idx(RACKET_GROUP, PLAYER_B_IDX)
+    def execute(self, cast, script, callback):
+        racket_a = cast.get_actor_by_idx(RACKET_GROUP, PLAYER_A_IDX)
+        racket_b = cast.get_actor_by_idx(RACKET_GROUP, PLAYER_B_IDX)
         
         if self._keyboard_service.is_key_down(PLAYER_A_KEY_UP):
             racket_a.swing_up()

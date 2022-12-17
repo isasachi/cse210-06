@@ -1,5 +1,5 @@
 from constants import *
-from game.elements.sound import Sound
+from game.casting.sound import Sound
 from game.scripting.action import Action
 
 class CollideRacketAction(Action):
@@ -8,9 +8,9 @@ class CollideRacketAction(Action):
         self._physics_service =  physics_service
         self._audio_service = audio_service
 
-    def execute(self, collection, script, callback):
-        ball = collection.get_first_entity(BALL_GROUP)
-        rackets = collection.get_entities(RACKET_GROUP)
+    def execute(self, cast, script, callback):
+        ball = cast.get_first_actor(BALL_GROUP)
+        rackets = cast.get_actors(RACKET_GROUP)
         
         for racket in rackets:
             ball_body = ball.get_body()

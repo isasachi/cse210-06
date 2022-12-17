@@ -1,5 +1,5 @@
 import pyray
-from game.elements.point import Point
+from game.casting.point import Point
 from game.services.mouse_service import MouseService
 
 

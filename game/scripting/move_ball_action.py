@@ -7,8 +7,8 @@ class MoveBallAction(Action):
     def __init__(self):
         pass
 
-    def execute(self, collection, script, callback):
-        ball = collection.get_first_entity(BALL_GROUP)
+    def execute(self, cast, script, callback):
+        ball = cast.get_first_actor(BALL_GROUP)
         body = ball.get_body()
         position = body.get_position()
         velocity = body.get_velocity()

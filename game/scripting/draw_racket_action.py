@@ -9,8 +9,8 @@ class DrawRacketAction(Action):
     def __init__(self, video_service):
         self._video_service = video_service
 
-    def execute(self, collection, script, callback):
-        rackets = collection.get_entities(RACKET_GROUP)
+    def execute(self, cast, script, callback):
+        rackets = cast.get_actors(RACKET_GROUP)
         
         for racket in rackets:
             body = racket.get_body()

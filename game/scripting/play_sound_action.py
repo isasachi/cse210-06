@@ -1,6 +1,6 @@
 from constants import *
 from game.scripting.action import Action
-from game.elements.sound import Sound
+from game.casting.sound import Sound
 
 
 class PlaySoundAction(Action):

@@ -6,6 +6,6 @@ class ReleaseDevicesAction(Action):
         self._audio_service = audio_service
         self._video_service = video_service
 
-    def execute(self, collection, script, callback):
+    def execute(self, cast, script, callback):
         self._audio_service.release()
         self._video_service.release()

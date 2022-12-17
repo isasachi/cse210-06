@@ -34,7 +34,7 @@ from game.services.raylib.raylib_video_service import RaylibVideoService
 
 
 class SceneManager:
-    """The person in charge of setting up the collection and script for each scene."""
+    """The person in charge of setting up the cast and script for each scene."""
     
     AUDIO_SERVICE = RaylibAudioService()
     KEYBOARD_SERVICE = RaylibKeyboardService()
@@ -60,28 +60,28 @@ class SceneManager:
     def __init__(self):
         pass
 
-    def prepare_scene(self, scene, collection, script):
+    def prepare_scene(self, scene, cast, script):
         if scene == NEW_GAME:
-            self._prepare_new_game(collection, script)
+            self._prepare_new_game(cast, script)
         elif scene == NEXT_LEVEL:
-            self._prepare_next_level(collection, script)
+            self._prepare_next_level(cast, script)
         elif scene == TRY_AGAIN:
-            self._prepare_try_again(collection, script)
+            self._prepare_try_again(cast, script)
         elif scene == IN_PLAY:
-            self._prepare_in_play(collection, script)
+            self._prepare_in_play(cast, script)
         elif scene == GAME_OVER:    
-            self._prepare_game_over(collection, script)
+            self._prepare_game_over(cast, script)
     
     # ----------------------------------------------------------------------------------------------
     # scene methods
     # ----------------------------------------------------------------------------------------------
     
-    def _prepare_new_game(self, collection, script):
-        self._add_stats(collection)
-        self._add_scores(collection)
-        self._add_ball(collection)
-        self._add_rackets(collection)
-        self._add_dialog(collection, ENTER_TO_START)
+    def _prepare_new_game(self, cast, script):
+        self._add_stats(cast)
+        self._add_scores(cast)
+        self._add_ball(cast)
+        self._add_rackets(cast)
+        self._add_dialog(cast, ENTER_TO_START)
 
         self._add_initialize_script(script)
         self._add_load_script(script)
@@ -92,44 +92,44 @@ class SceneManager:
         self._add_release_script(script)
         script.add_action(OUTPUT, PlaySoundAction(self.AUDIO_SERVICE, INIT_SOUND))
         
-    def _prepare_next_level(self, collection, script):
-        self._add_ball(collection)
-        self._add_rackets(collection)
-        self._add_dialog(collection, PREP_TO_LAUNCH)
+    def _prepare_next_level(self, cast, script):
+        self._add_ball(cast)
+        self._add_rackets(cast)
+        self._add_dialog(cast, PREP_TO_LAUNCH)
 
         script.clear_actions(INPUT)
         script.add_action(INPUT, TimedChangeSceneAction(IN_PLAY, 2))
         self._add_output_script(script)
         script.add_action(OUTPUT, PlaySoundAction(self.AUDIO_SERVICE, WELCOME_SOUND))
         
-    def _prepare_try_again(self, collection, script):
-        self._add_ball(collection)
-        self._add_rackets(collection)
-        self._add_dialog(collection, PREP_TO_LAUNCH)
+    def _prepare_try_again(self, cast, script):
+        self._add_ball(cast)
+        self._add_rackets(cast)
+        self._add_dialog(cast, PREP_TO_LAUNCH)
 
         script.clear_actions(INPUT)
         script.add_action(INPUT, TimedChangeSceneAction(IN_PLAY, 2))
         self._add_update_script(script)
         self._add_output_script(script)
 
-    def _prepare_in_play(self, collection, script):
-        self._activate_ball(collection)
-        collection.clear_entities(DIALOG_GROUP)
+    def _prepare_in_play(self, cast, script):
+        self._activate_ball(cast)
+        cast.clear_actors(DIALOG_GROUP)
 
         script.clear_actions(INPUT)
         script.add_action(INPUT, self.CONTROL_RACKET_ACTION)
         self._add_update_script(script)
         self._add_output_script(script)
 
-    def _prepare_game_over(self, collection, script):
-        self._add_ball(collection)
-        self._add_rackets(collection)
-        self._add_dialog(collection, WAS_GOOD_GAME)
+    def _prepare_game_over(self, cast, script):
+        self._add_ball(cast)
+        self._add_rackets(cast)
+        self._add_dialog(cast, WAS_GOOD_GAME)
         winner = ""
-        for stat in collection.get_entities(STATS_GROUP):
+        for stat in cast.get_actors(STATS_GROUP):
             if stat.get_is_winner():
                 winner = stat.get_name()
-        self._add_dialog_winner(collection, winner)
+        self._add_dialog_winner(cast, winner)
 
         script.clear_actions(INPUT)
         script.add_action(INPUT, TimedChangeSceneAction(NEW_GAME, 5))
@@ -140,12 +140,12 @@ class SceneManager:
     # elements methods
     # ----------------------------------------------------------------------------------------------
     
-    def _activate_ball(self, collection):
-        ball = collection.get_first_entity(BALL_GROUP)
+    def _activate_ball(self, cast):
+        ball = cast.get_first_actor(BALL_GROUP)
         ball.release()
 
-    def _add_ball(self, collection):
-        collection.clear_entities(BALL_GROUP)
+    def _add_ball(self, cast):
+        cast.clear_actors(BALL_GROUP)
         x = CENTER_X - BALL_WIDTH / 2
         y = CENTER_Y - BALL_HEIGHT
         position = Point(x, y)
@@ -154,43 +154,43 @@ class SceneManager:
         body = Body(position, size, velocity)
         image = Image(BALL_IMAGE)
         ball = Ball(body, image, True)
-        collection.add_entity(BALL_GROUP, ball)
+        cast.add_actor(BALL_GROUP, ball)
 
-    def _add_dialog(self, collection, message):
-        collection.clear_entities(DIALOG_GROUP)
+    def _add_dialog(self, cast, message):
+        cast.clear_actors(DIALOG_GROUP)
         text = Text(message, FONT_FILE, FONT_SMALL, ALIGN_CENTER)
         position = Point(CENTER_X, CENTER_Y)
         label = Label(text, position)
-        collection.add_entity(DIALOG_GROUP, label)
+        cast.add_actor(DIALOG_GROUP, label)
     
-    def _add_dialog_winner(self, collection, winner):
+    def _add_dialog_winner(self, cast, winner):
         message = WINNER_GAME.format(winner)
         text = Text(message, FONT_FILE, FONT_SMALL, ALIGN_CENTER)
         position = Point(CENTER_X, CENTER_Y + FRAME_RATE)
         label = Label(text, position)
-        collection.add_entity(DIALOG_GROUP, label)
+        cast.add_actor(DIALOG_GROUP, label)
 
-    def _add_scores(self, collection):
-        collection.clear_entities(SCORE_GROUP)
+    def _add_scores(self, cast):
+        cast.clear_actors(SCORE_GROUP)
         text = Text(SCORE_FORMAT, FONT_FILE, FONT_SMALL, ALIGN_CENTER)
         label = Label(text, SCORE_A_POSITION)
-        collection.add_entity(SCORE_GROUP, label)
+        cast.add_actor(SCORE_GROUP, label)
         
         label_b = Label(text, SCORE_B_POSITION)
-        collection.add_entity(SCORE_GROUP, label_b)
+        cast.add_actor(SCORE_GROUP, label_b)
 
-    def _add_stats(self, collection):
-        collection.clear_entities(STATS_GROUP)
+    def _add_stats(self, cast):
+        cast.clear_actors(STATS_GROUP)
         stat = Stats()
         stat.set_name(PLAYER_A_NAME)
-        collection.add_entity(STATS_GROUP, stat)
+        cast.add_actor(STATS_GROUP, stat)
         
         stat_b = Stats()
         stat_b.set_name(PLAYER_B_NAME)
-        collection.add_entity(STATS_GROUP, stat_b)
+        cast.add_actor(STATS_GROUP, stat_b)
 
-    def _add_rackets(self, collection):
-        collection.clear_entities(RACKET_GROUP)
+    def _add_rackets(self, cast):
+        cast.clear_actors(RACKET_GROUP)
         x = (CENTER_X / 2) - (RACKET_WIDTH / 2)
         y = CENTER_Y - RACKET_HEIGHT/2
         position = Point(x, y)
@@ -199,12 +199,12 @@ class SceneManager:
         body = Body(position, size, velocity)
         animation = Animation(RACKET_IMAGES, RACKET_RATE)
         racket = Racket(body, animation)
-        collection.add_entity(RACKET_GROUP, racket)
+        cast.add_actor(RACKET_GROUP, racket)
         
         position_b = Point(CENTER_X + x, y)
         body_b = Body(position_b, size, velocity)
         racket_b = Racket(body_b, animation)
-        collection.add_entity(RACKET_GROUP, racket_b)
+        cast.add_actor(RACKET_GROUP, racket_b)
 
     # ----------------------------------------------------------------------------------------------
     # scripting methods

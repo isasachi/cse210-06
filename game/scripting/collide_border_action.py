@@ -1,5 +1,5 @@
 from constants import *
-from game.elements.sound import Sound
+from game.casting.sound import Sound
 from game.scripting.action import Action
 
 class CollideBordersAction(Action):
@@ -8,8 +8,8 @@ class CollideBordersAction(Action):
         self._physics_service = physics_service
         self._audio_service = audio_service
 
-    def execute(self, collection, script, callback):
-        ball = collection.get_first_entity(BALL_GROUP)
+    def execute(self, cast, script, callback):
+        ball = cast.get_first_actor(BALL_GROUP)
         body = ball.get_body()
         position = body.get_position()
         x = position.get_x()
@@ -19,7 +19,7 @@ class CollideBordersAction(Action):
 
         if x < (FIELD_LEFT + BALL_WIDTH):
             # opposite score to add points
-            stat_b = collection.get_entity_by_idx(STATS_GROUP, PLAYER_B_IDX)
+            stat_b = cast.get_actor_by_idx(STATS_GROUP, PLAYER_B_IDX)
             stat_b.add_points(PLAYER_DEFAULT_POINTS)
             if stat_b.get_score() >= GAME_MAX_SCORE:
                 stat_b.set_is_winner(True)
@@ -29,7 +29,7 @@ class CollideBordersAction(Action):
                 callback.on_next(TRY_AGAIN)
         
         elif x >= (FIELD_RIGHT - BALL_WIDTH):
-            stat_a = collection.get_entity_by_idx(STATS_GROUP, PLAYER_A_IDX)
+            stat_a = cast.get_actor_by_idx(STATS_GROUP, PLAYER_A_IDX)
             stat_a.add_points(PLAYER_DEFAULT_POINTS)
             if stat_a.get_score() >= GAME_MAX_SCORE:
                 stat_a.set_is_winner(True)

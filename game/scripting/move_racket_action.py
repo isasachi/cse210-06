@@ -1,6 +1,6 @@
 from turtle import position
 from constants import *
-from game.elements.point import Point
+from game.casting.point import Point
 from game.scripting.action import Action
 
 class MoveRacketAction(Action):
@@ -8,8 +8,8 @@ class MoveRacketAction(Action):
     def __ini__(self):
         pass
 
-    def execute(self, collection, script, callback):
-        rackets = collection.get_entities(RACKET_GROUP)
+    def execute(self, cast, script, callback):
+        rackets = cast.get_actors(RACKET_GROUP)
         for racket in rackets:
             body = racket.get_body()
             velocity = body.get_velocity()

@@ -8,8 +8,8 @@ class DrawBallAction(Action):
     def __init__(self, video_service):
         self._video_service = video_service
 
-    def execute(self, collection, script, callback):
-        ball = collection.get_first_entity(BALL_GROUP)
+    def execute(self, cast, script, callback):
+        ball = cast.get_first_actor(BALL_GROUP)
         body = ball.get_body()
 
         image = ball.get_image()
